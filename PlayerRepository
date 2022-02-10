@@ -1,0 +1,22 @@
+package battleship;
+
+import java.util.ArrayList;
+
+public class PlayerRepository {
+
+    private ArrayList<Player> players;
+
+    public PlayerRepository() {
+        this.players = new ArrayList<>();
+        players.add(new Player());
+        players.add(new Player());
+    }
+
+    public Player changePlayer(Player player) {
+        return players.get(1 - players.indexOf(player));
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+}
