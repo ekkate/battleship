@@ -1,0 +1,86 @@
+package battleship.gametools;
+
+public class Game {
+
+    public static final int FIELDS = 11;
+
+    private String[][] gameField;
+
+    public Game() {
+        this.gameField = new String[FIELDS][FIELDS];
+    }
+
+    public String[][] getGameField() {
+        return gameField;
+    }
+
+    public void initGame() {
+        for(int i = 1 ; i < FIELDS ; i++) {
+            gameField[0][i] = String.valueOf(i);
+            gameField[i][0] = String.valueOf((char) ((int) ('A') + i - 1));
+            for(int j = 1 ; j < FIELDS ; j++) {
+                gameField[i][j] = "~";
+            }
+            gameField[0][0] = "";
+        }
+    }
+
+    public void markShip(int x, int y) {
+        gameField[y][x] = "O";
+    }
+
+    public String returnValue(GamePoint gamePoint) {
+        return gameField[gamePoint.getY()][gamePoint.getX()];
+    }
+
+    public void setValue(GamePoint gamePoint, String value) {
+        gameField[gamePoint.getY()][gamePoint.getX()] = value;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(System.lineSeparator());
+        for(int i = 0 ; i < FIELDS ; i++) {
+            for(int j = 0 ; j < FIELDS ; j++) {
+                sb.append(gameField[i][j]).append(" ");
+            }
+            sb.append(System.lineSeparator());
+        };
+        return sb.toString();
+    }
+
+    public boolean isDead(GamePoint shot) {
+        boolean notDead = false;
+        for(int dy = -1; dy < 2; dy+=2) {
+            if(check(shot.getY(), shot.getX(), dy, 0)){
+                notDead = true;
+                break;
+            }
+        }
+        if(!notDead) {
+            for (int dx = -1 ; dx < 2 ; dx += 2 ) {
+                if (check(shot.getY(), shot.getX(), 0, dx)) {
+                    notDead = true;
+                    break;
+                }
+            }
+        }
+        return !notDead;
+    }
+
+    public boolean check(int y, int x, int dy, int dx) {
+        boolean notDead = false;
+        x += dx;
+        y += dy;
+        while ((x < FIELDS && x >= 0 && y < FIELDS && y >= 0) && !gameField[y][x].equals("~")) {
+            if (gameField[y][x].equals("O")) {
+                notDead = true;
+                break;
+            } else {
+                x += dx;
+                y += dy;
+            }
+        }
+        return notDead;
+    }
+}
