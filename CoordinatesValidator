@@ -1,0 +1,48 @@
+package battleship;
+
+import battleship.gametools.Game;
+import battleship.gametools.GamePoint;
+
+public class CoordinatesValidator {
+
+    public static boolean validateLength(GamePoint start, GamePoint end, int length, String ship){
+        return (start.getDistance(end) + 1 == length);
+    }
+
+    public static boolean validateEnoughDistance(GamePoint start, GamePoint end, Game game) {
+        boolean valid = true;
+        if(start.getDistance(end) + 1 == 5) {
+            return true;
+        } else {
+            for(int y = start.getY() - 1; y <= end.getY() + 1; y++)
+                for (int x = start.getX() - 1; x <= end.getX() + 1; x++) {
+                    if(y > 0 && x > 0 && y < Game.FIELDS && x < Game.FIELDS) {
+                        if(!(game.getGameField()[y][x].equals("~"))) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+        }
+        return valid;
+    }
+
+    public static boolean validateLocation(GamePoint start, GamePoint end) {
+        return start.getY() == end.getY() ^ start.getX() == end.getX();
+    }
+
+    public static boolean validate(GamePoint start, GamePoint end, int length, String ship, Game game) {
+        if (!validateLocation(start, end)) {
+            throw new IllegalArgumentException("Error! Wrong ship location! Try again:");
+        } else {
+            if (!validateLength(start, end, length, ship)) {
+                throw new IllegalArgumentException(String.format("Error! Wrong length of the %s! Try again:\n", ship));
+            } else {
+                if (!validateEnoughDistance(start, end, game)) {
+                    throw new IllegalArgumentException("Error! You placed it too close to another one. Try again:");
+                }
+            }
+        }
+        return true;
+    }
+}
