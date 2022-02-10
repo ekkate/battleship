@@ -1,0 +1,16 @@
+package battleship;
+
+public class CoordinatesConverter {
+
+    private static final int convertInteger = 16;
+
+    public static int convert(char Y){
+        int y;
+        if (Y == 'J') {
+            y = 10;
+        } else {
+            y = Integer.parseInt(String.valueOf((char) (Y - convertInteger)));
+        }
+        return y;
+    }
+}
