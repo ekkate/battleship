@@ -1,0 +1,66 @@
+package battleship;
+
+import battleship.gametools.Game;
+import battleship.gametools.GamePoint;
+
+import java.util.LinkedHashMap;
+
+public class Player {
+
+    private Game game;
+    private Game hiddenGame;
+    private boolean shipsPlaced;
+    private int deadShips;
+
+    private LinkedHashMap<String, Integer> ships;
+
+    public Player() {
+        this.game = new Game();
+        this.hiddenGame = new Game();
+        ships = new LinkedHashMap<>();
+        shipsPlaced = false;
+        deadShips = 0;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public Game getHiddenGame() {
+        return hiddenGame;
+    }
+
+    public int getDeadShips() {
+        return deadShips;
+    }
+
+    public LinkedHashMap<String, Integer> getShips() {
+        return ships;
+    }
+
+    public String initPlayer() {
+        game.initGame();
+        hiddenGame.initGame();
+        ships.put("Aircraft Carrier", 5);
+        ships.put("Battleship", 4);
+        ships.put("Submarine", 3);
+        ships.put("Cruiser", 3);
+        ships.put("Destroyer", 2);
+        return game.toString();
+    }
+
+    public void placeShip(GamePoint start, GamePoint end) {
+        for(int x = start.getX(); x <= end.getX(); x++)
+            for (int y = start.getY(); y <= end.getY(); y++) {
+                game.markShip(x, y);
+            }
+    }
+
+    public boolean verifyIfDead(GamePoint shot) {
+        if(this.game.isDead(shot)) {
+            deadShips++;
+            return true;
+        }
+        return false;
+    }
+}
